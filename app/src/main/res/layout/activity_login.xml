@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FBE2E5">
@@ -7,7 +8,7 @@
     <ImageView
         android:id="@+id/imageViewBg"
         android:layout_width="match_parent"
-        android:layout_height="633dp"
+        android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/login_bg" />
 
@@ -15,75 +16,80 @@
         android:id="@+id/tv_tieude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/imageViewBg"
+        android:layout_marginTop="100dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="-552dp"
         android:fontFamily="@font/ubuntu_bold"
         android:text="Login"
-        android:textColor="#FF4E8B"
-        android:textSize="80sp" />
+        android:textColor="#000000"
+        android:textSize="36sp" />
 
-    <EditText
-        android:id="@+id/editTextUsername"
-        android:layout_width="match_parent"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardViewInputFields"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_tieude"
-        android:layout_centerVertical="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="20dp"
-        android:drawableLeft="@drawable/signup_username"
-        android:hint=" Username"
-        android:textColor="@android:color/black"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:textColorHint="#51000000"
-        android:textColorHighlight="#FF4E8B"
-        android:textColorLink="#FA216C" />
-
-    <EditText
-        android:id="@+id/editTextPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/editTextUsername"
-        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:drawableLeft="@drawable/login_password"
-        android:hint=" Password"
-        android:inputType="textPassword"
-        android:textColor="@android:color/black"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:textColorHint="#51000000"
-        android:textColorHighlight="#FF4E8B"
-        android:textColorLink="#FA216C" />
+        android:layout_below="@id/tv_tieude"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="6dp"
+        app:cardBackgroundColor="#FFFFFF">
 
-    <Button
-        android:id="@+id/bt_login"
-        android:layout_width="176dp"
-        android:layout_height="64dp"
-        android:layout_below="@id/imageViewBg"
-        android:layout_marginTop="-1dp"
-        android:background="@drawable/rounded_button"
-        android:text="Login"
-        android:layout_centerHorizontal="true"
-        android:textColor="#2182AF"
-        android:textSize="30dp"
-        android:textStyle="bold"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
 
-    <TextView
-        android:id="@+id/tv_signup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/bt_login"
-        android:text="Are you new user? Sign up"
-        android:layout_centerHorizontal="true"
-        android:textColor="#FD518B"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        android:layout_marginTop="25dp"
-        android:gravity="center"/>
+            <EditText
+                android:id="@+id/editTextUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:drawableLeft="@drawable/login_username"
+                android:drawablePadding="10dp"
+                android:hint="Email"
+                android:textColor="@android:color/black"
+                android:padding="10dp"
+                android:background="@drawable/edittext_background"
+                android:textColorHint="#51000000" />
 
+            <EditText
+                android:id="@+id/editTextPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/login_password"
+                android:drawablePadding="10dp"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:textColor="@android:color/black"
+                android:padding="10dp"
+                android:background="@drawable/edittext_background"
+                android:textColorHint="#51000000" />
+
+            <Button
+                android:id="@+id/bt_login"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="#4A90E2"
+                android:text="SIGN UP"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tv_signup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cardViewInputFields"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="Already an user? Login"
+                android:textColor="#4A90E2"
+                android:textSize="16sp"
+                android:layout_gravity="center"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>
