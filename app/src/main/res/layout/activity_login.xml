@@ -13,6 +13,7 @@
         android:src="@drawable/login_bg" />
 
     <TextView
+
         android:id="@+id/tv_tieude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,7 +22,7 @@
         android:fontFamily="@font/ubuntu_bold"
         android:text="Login"
         android:textColor="#000000"
-        android:textSize="36sp" />
+        android:textSize="44sp" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewInputFields"
@@ -47,7 +48,7 @@
                 android:layout_marginBottom="16dp"
                 android:drawableLeft="@drawable/login_username"
                 android:drawablePadding="10dp"
-                android:hint="Email"
+                android:hint="Username"
                 android:textColor="@android:color/black"
                 android:padding="10dp"
                 android:background="@drawable/edittext_background"
@@ -72,22 +73,10 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="20dp"
                 android:backgroundTint="#4A90E2"
-                android:text="SIGN UP"
+                android:text="LOGIN"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
                 android:textStyle="bold"/>
-
-            <TextView
-                android:id="@+id/tv_signup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/cardViewInputFields"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:text="Already an user? Login"
-                android:textColor="#4A90E2"
-                android:textSize="16sp"
-                android:layout_gravity="center"/>
 
         </LinearLayout>
 
