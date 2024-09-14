@@ -1,4 +1,4 @@
-package com.example.orderingfoods;
+package com.example.orderingfoods.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,7 +7,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.orderingfoods.Data.DatabaseHandler;
+import com.example.orderingfoods.R;
 
 public class HomeActivity extends AppCompatActivity {
     Button loginButton;

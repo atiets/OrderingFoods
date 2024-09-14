@@ -1,15 +1,11 @@
-package com.example.orderingfoods;
+package com.example.orderingfoods.Activity;
 
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.orderingfoods.Data.DatabaseHandler;
-import com.example.orderingfoods.Models.User;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.orderingfoods.R;
 
 public class MainActivity extends AppCompatActivity {
 
