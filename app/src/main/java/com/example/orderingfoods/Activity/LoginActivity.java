@@ -1,4 +1,4 @@
-package com.example.orderingfoods;
+package com.example.orderingfoods.Activity;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.orderingfoods.Data.DatabaseHandler;
+import com.example.orderingfoods.R;
 
 public class LoginActivity extends AppCompatActivity {
     EditText loginUsername, loginPassword;
@@ -84,8 +85,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 // So sánh mật khẩu từ cơ sở dữ liệu với mật khẩu người dùng nhập
                 if (passwordFromDB.equals(userPassword)) {
-                    // Đăng nhập thành công, chuyển sang MainActivity
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    // Đăng nhập thành công, chuyển sang HomeActivity
+                    Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
                     intent.putExtra("username", usernameFromDB);
                     Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
                     startActivity(intent);
