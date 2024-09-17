@@ -15,13 +15,13 @@ import com.example.orderingfoods.R;
 
 import java.util.List;
 
-public class FoodListAdapter extends BaseAdapter {
+public class FoodAdapter extends BaseAdapter {
     private Context context;
     private int layout;
     private List<Food> foodList;
 
     // Constructor
-    public FoodListAdapter(Context context, int layout, List<Food> foodList) {
+    public FoodAdapter(Context context, int layout, List<Food> foodList) {
         this.context = context;
         this.layout = layout;
         this.foodList = foodList;

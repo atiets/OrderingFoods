@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:gravity="center"
+    android:background="@drawable/food_item_background"
+    android:elevation="4dp">
+
+    <!-- Ảnh của món ăn -->
+    <ImageView
+        android:id="@+id/image_pic"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_launcher_background"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/circle_shape"
+        android:elevation="2dp" />
+
+    <!-- Tên món ăn -->
+    <TextView
+        android:id="@+id/tv_NameTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tên món ăn"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_marginTop="8dp" />
+
+    <!-- Mô tả món ăn -->
+    <TextView
+        android:id="@+id/tv_DescTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mô tả món ăn"
+        android:textSize="14sp"
+        android:textColor="@android:color/darker_gray"
+        android:gravity="center"
+        android:layout_marginTop="4dp" />
+
+    <!-- Giá của món ăn -->
+    <TextView
+        android:id="@+id/tv_Price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Giá: 0 VND"
+        android:textSize="16sp"
+        android:textColor="@android:color/holo_red_dark"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginTop="4dp" />
+
+    <!-- Điều chỉnh số lượng món ăn -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="8dp">
+
+        <ImageButton
+            android:id="@+id/button_Add"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/food_add"
+            android:contentDescription="Add"
+            android:background="@drawable/food_button_background"
+            android:padding="4dp"
+            android:elevation="2dp" />
+
+        <TextView
+            android:id="@+id/tv_Quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textSize="18sp"
+            android:layout_marginHorizontal="12dp"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/button_Subtract"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/food_minus"
+            android:contentDescription="Subtract"
+            android:background="@drawable/food_button_background"
+            android:padding="4dp"
+            android:elevation="2dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
