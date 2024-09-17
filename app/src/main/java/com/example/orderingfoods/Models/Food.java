@@ -10,6 +10,7 @@ public class Food implements Serializable {
     private String imageUrl;
     private int quantity;
 
+
     public Food(int id, String name, String description, double price, String imageUrl, int quantity) {
         this.id = id;
         this.name = name;
