@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activity.MainActivity"
-    android:background="#FFE4E4">
+    android:background="#FDE9E9">
 
     <TextView
-        android:id="@+id/titleTextViewList"
+        android:id="@+id/titleTextViewGrid"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="#003EDC"
-        android:text="ListView"
+        android:text="GridView"
         android:textColor="@android:color/white"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -22,13 +22,15 @@
         android:padding="16dp"
         app:layout_constraintHorizontal_bias="0.5" />
 
-    <ListView
-        android:id="@+id/listview1"
+    <GridView
+        android:numColumns="3"
+        android:id="@+id/gridview1"
         android:layout_width="409dp"
-        android:layout_height="0dp"
-        android:layout="@layout/row_food_list"
-        app:layout_constraintTop_toBottomOf="@id/titleTextViewList"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="2dp" />
+        android:layout_height="729dp"
+        android:layout="@layout/row_food_grid"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="1dp"
+        app:layout_constraintTop_toBottomOf="@id/titleTextViewGrid"
+        tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
