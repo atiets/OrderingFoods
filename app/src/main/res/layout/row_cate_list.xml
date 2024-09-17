@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:gravity="center"
+    android:background="@drawable/food_item_background"
+    android:elevation="4dp">
+
+    <ImageView
+        android:id="@+id/image_pic_cate"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_launcher_background"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/circle_shape"
+        android:elevation="2dp" />
+
+    <TextView
+        android:id="@+id/tv_NameTitle_cate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tên danh mục"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_marginTop="8dp" />
+
+</LinearLayout>

@@ -1,21 +1,83 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
 
+    <!-- Thanh điều hướng -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        android:elevation="4dp" />
+
+    <!-- Hình ảnh món ăn -->
+    <ImageView
+        android:id="@+id/image_dish"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@id/toolbar"
+        android:scaleType="centerCrop"
+        android:src="@drawable/menu_topimg" />
+
+    <!-- Danh sách danh mục bên trái -->
     <ListView
         android:id="@+id/listview_category"
         android:layout_width="120dp"
         android:layout_height="match_parent"
+        android:layout_below="@id/image_dish"
         android:layout_alignParentStart="true"
-        android:layout_marginEnd="8dp"
-        android:background="@android:color/white" />
+        android:background="@android:color/white"
+        android:layout_marginEnd="8dp" />
 
-    <ListView
-        android:id="@+id/listview_foods"
-        android:layout_width="match_parent"
+    <!-- GridView hiển thị món ăn -->
+    <GridView
+        android:id="@+id/gridview_foods"
+        android:numColumns="2"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
+        android:layout_below="@id/image_dish"
         android:layout_toEndOf="@id/listview_category"
-        android:background="@android:color/white" />
+        android:layout_alignParentEnd="true"
+        android:background="@android:color/white"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp"
+        android:stretchMode="columnWidth"
+        android:gravity="center" />
+
+    <!-- Phần tổng và nút lưu dưới cùng -->
+    <LinearLayout
+        android:id="@+id/total_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/white"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/text_qty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Qty: 0"
+            android:textStyle="bold"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/text_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total: 0"
+            android:textStyle="bold"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/button_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save" />
+    </LinearLayout>
 
 </RelativeLayout>

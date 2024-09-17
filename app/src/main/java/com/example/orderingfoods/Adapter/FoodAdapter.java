@@ -27,6 +27,11 @@ public class FoodAdapter extends BaseAdapter {
         this.foodList = foodList;
     }
 
+    public void updateFoodList(List<Food> newFoodList) {
+        this.foodList = newFoodList;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return foodList.size();
