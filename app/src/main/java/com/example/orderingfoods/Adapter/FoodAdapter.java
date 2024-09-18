@@ -34,12 +34,12 @@ public class FoodAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return foodList.size();
+        return foodList != null ? foodList.size() : 0;
     }
 
     @Override
     public Object getItem(int position) {
-        return foodList.get(position);
+        return foodList != null ? foodList.get(position) : null;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class FoodAdapter extends BaseAdapter {
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(layout, null);
+            convertView = inflater.inflate(layout, parent, false);
 
             viewHolder = new ViewHolder();
             viewHolder.textName = convertView.findViewById(R.id.tv_NameTitle);
@@ -76,6 +76,8 @@ public class FoodAdapter extends BaseAdapter {
         }
 
         Food food = foodList.get(position);
+
+        // Bind data to viewHolder
         viewHolder.textName.setText(food.getName());
         viewHolder.textDesc.setText(food.getDescription());
         viewHolder.textPrice.setText("Giá: " + food.getPrice() + " VND");
@@ -93,7 +95,7 @@ public class FoodAdapter extends BaseAdapter {
             int currentQuantity = food.getQuantity();
             food.setQuantity(currentQuantity + 1);
             viewHolder.textQuantity.setText(String.valueOf(food.getQuantity()));
-            notifyDataSetChanged();
+            // Notify adapter only if needed
         });
 
         // Handle subtract button click
@@ -102,7 +104,7 @@ public class FoodAdapter extends BaseAdapter {
             if (currentQuantity > 0) {
                 food.setQuantity(currentQuantity - 1);
                 viewHolder.textQuantity.setText(String.valueOf(food.getQuantity()));
-                notifyDataSetChanged();
+                // Notify adapter only if needed
             }
         });
 

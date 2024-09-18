@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">OrderingFoods</string>
+    <string-array name="layout_options">
+        <item>Grid View</item>
+        <item>List View</item>
+    </string-array>
 </resources>

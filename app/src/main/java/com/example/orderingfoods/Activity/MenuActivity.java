@@ -3,10 +3,12 @@ package com.example.orderingfoods.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,10 +23,13 @@ import com.example.orderingfoods.R;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+import kotlin.Suppress;
+
 public class MenuActivity extends AppCompatActivity {
     //private ListView listView;
-    private GridView gridView;
-    private ListView listView;
+    Spinner layoutSpinner;
+    private GridView gridView_food;
+    private ListView listView_cate, listView_food;
     private ArrayList<Food> foodList;
     private FoodAdapter foodAdapter;
     private ArrayList<Category> categoryList;
@@ -36,8 +41,15 @@ public class MenuActivity extends AppCompatActivity {
         //setContentView(R.layout.activity_foods_list);
         setContentView(R.layout.activity_menu_category);
 
-        listView = findViewById(R.id.listview_category);
-        gridView = (GridView) findViewById(R.id.gridview_foods);
+        layoutSpinner = findViewById(R.id.layout_spinner);
+        listView_cate = findViewById(R.id.listview_category);
+        gridView_food = (GridView) findViewById(R.id.gridview_foods);
+        listView_food = findViewById(R.id.listview_foods);
+
+        String[] layoutOptions = {"Grid View", "List View"};
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, layoutOptions);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        layoutSpinner.setAdapter(spinnerAdapter);
 
         // Tạo danh sách các món ăn
         ArrayList<Food> foodlist1 = new ArrayList<>();
@@ -66,15 +78,37 @@ public class MenuActivity extends AppCompatActivity {
 
         // Khởi tạo adapter với danh sách món ăn
         foodAdapter = new FoodAdapter(MenuActivity.this, R.layout.row_food_grid, new ArrayList<Food>());
-        gridView.setAdapter(foodAdapter);
+        gridView_food.setAdapter(foodAdapter);
+        listView_food.setAdapter(foodAdapter);
 
         // Khởi tạo adapter với danh sách category
         categoryAdapter = new CategoryAdapter(MenuActivity.this, R.layout.row_cate_list, categoryList);
         //listView.setAdapter(adapter);
-        listView.setAdapter(categoryAdapter);
+        listView_cate.setAdapter(categoryAdapter);
 
 
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        layoutSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedLayout = parent.getItemAtPosition(position).toString();
+
+                if(selectedLayout.equals("Grid View")) {
+                    gridView_food.setVisibility(View.VISIBLE);
+                    listView_food.setVisibility(View.GONE);
+                } else if (selectedLayout.equals("List View")) {
+                    listView_food.setVisibility(View.VISIBLE);
+                    gridView_food.setVisibility(View.GONE);
+                }
+            }
+
+
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Không làm gì nếu không có mục nào được chọn
+            }
+        });
+
+
+        gridView_food.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // Lấy món ăn được chọn
@@ -85,14 +119,25 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView_food.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Lấy món ăn được chọn
+                Food selectedFood = foodList.get(position);
+
+                // Hiển thị thông tin món ăn bằng Toast
+                Toast.makeText(MenuActivity.this, "Món: " + selectedFood.getName() + "\nGiá: " + selectedFood.getPrice() + " VND", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        listView_cate.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Category selectedCategory = categoryList.get(position);
                 // Update the food list for the selected category
                 foodAdapter.updateFoodList(selectedCategory.getFoodList());
                 // Optionally scroll to the top or refresh the view
-                gridView.smoothScrollToPosition(0);
+                gridView_food.smoothScrollToPosition(0);
             }
         });
 
