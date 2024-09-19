@@ -47,20 +47,19 @@ public class CategoryAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertvew, ViewGroup viewGroup) {
+    public View getView(int position, View convertView, ViewGroup viewGroup) {
         ViewHolder viewHolder;
-        System.out.println("locdz");
-        if (convertvew == null) {
+        if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertvew = inflater.inflate(layout, null);
+            convertView = inflater.inflate(layout, null);
 
             viewHolder = new ViewHolder();
-            viewHolder.textName = convertvew.findViewById(R.id.tv_NameTitle_cate);
-            viewHolder.imagePic = convertvew.findViewById(R.id.image_pic_cate);
+            viewHolder.textName = convertView.findViewById(R.id.tv_NameTitle_cate);
+            viewHolder.imagePic = convertView.findViewById(R.id.image_pic_cate);
 
-            convertvew.setTag(viewHolder);
+            convertView.setTag(viewHolder);
         } else {
-            viewHolder = (ViewHolder) convertvew.getTag();
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
         Category category = categoryList.get(position);
@@ -72,8 +71,7 @@ public class CategoryAdapter extends BaseAdapter {
                 .error(R.drawable.error_image) // Ảnh lỗi nếu không tải được URL
                 .into(viewHolder.imagePic);
 
-        System.out.println("ss" + Glide.with(context));
-        return convertvew;
+        return convertView;
     }
 
 }

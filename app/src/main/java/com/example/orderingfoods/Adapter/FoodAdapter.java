@@ -67,7 +67,7 @@ public class FoodAdapter extends BaseAdapter {
 
         for (Food food : foodList) {
             totalQuantity += food.getQuantity();
-            totalPrice += food.getQuantity() * food.getPrice(); // Giả định food.getPrice() trả về kiểu double
+            totalPrice += food.getQuantity() * food.getPrice();
         }
 
         if (quantityChangeListener != null) {
