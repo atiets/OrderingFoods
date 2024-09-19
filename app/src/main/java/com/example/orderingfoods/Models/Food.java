@@ -1,3 +1,4 @@
+// Food.java
 package com.example.orderingfoods.Models;
 
 import java.io.Serializable;
@@ -9,15 +10,16 @@ public class Food implements Serializable {
     private double price;
     private String imageUrl;
     private int quantity;
+    private Category category; // Thêm thuộc tính Category
 
-
-    public Food(int id, String name, String description, double price, String imageUrl, int quantity) {
+    public Food(int id, String name, String description, double price, String imageUrl, int quantity, Category category) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.imageUrl = imageUrl;
         this.quantity = quantity;
+        this.category = category; // Khởi tạo category
     }
 
     public Food() {}
@@ -68,5 +70,13 @@ public class Food implements Serializable {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public Category getCategory() { // Thêm phương thức getCategory
+        return category;
+    }
+
+    public void setCategory(Category category) { // Thêm phương thức setCategory
+        this.category = category;
     }
 }
