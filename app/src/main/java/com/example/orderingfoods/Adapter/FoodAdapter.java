@@ -19,12 +19,15 @@ public class FoodAdapter extends BaseAdapter {
     private Context context;
     private int layout;
     private List<Food> foodList;
+    private OnQuantityChangeListener quantityChangeListener;
+
 
     // Constructor
-    public FoodAdapter(Context context, int layout, List<Food> foodList) {
+    public FoodAdapter(Context context, int layout, List<Food> foodList, OnQuantityChangeListener quantityChangeListener) {
         this.context = context;
         this.layout = layout;
         this.foodList = foodList;
+        this.quantityChangeListener = quantityChangeListener;
     }
 
     public void updateFoodList(List<Food> newFoodList) {
@@ -53,6 +56,25 @@ public class FoodAdapter extends BaseAdapter {
         ImageButton buttonAdd, buttonSubtract;
     }
 
+    public interface OnQuantityChangeListener {
+        void onQuantityChanged(int totalQuantity, double totalPrice);
+    }
+
+
+    private void updateTotal() {
+        int totalQuantity = 0;
+        double totalPrice = 0.0;
+
+        for (Food food : foodList) {
+            totalQuantity += food.getQuantity();
+            totalPrice += food.getQuantity() * food.getPrice(); // Giả định food.getPrice() trả về kiểu double
+        }
+
+        if (quantityChangeListener != null) {
+            quantityChangeListener.onQuantityChanged(totalQuantity, totalPrice);
+        }
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
@@ -75,6 +97,8 @@ public class FoodAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
+
+
         Food food = foodList.get(position);
 
         // Bind data to viewHolder
@@ -95,16 +119,16 @@ public class FoodAdapter extends BaseAdapter {
             int currentQuantity = food.getQuantity();
             food.setQuantity(currentQuantity + 1);
             viewHolder.textQuantity.setText(String.valueOf(food.getQuantity()));
-            // Notify adapter only if needed
+            updateTotal();
         });
 
-        // Handle subtract button click
+        // Handle subtract button clicka
         viewHolder.buttonSubtract.setOnClickListener(v -> {
             int currentQuantity = food.getQuantity();
             if (currentQuantity > 0) {
                 food.setQuantity(currentQuantity - 1);
                 viewHolder.textQuantity.setText(String.valueOf(food.getQuantity()));
-                // Notify adapter only if needed
+                updateTotal();
             }
         });
 
