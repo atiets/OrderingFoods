@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:background="@drawable/food_item_background"
+    android:layout_marginVertical="8dp"
+    android:elevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tv_name_cart"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Tên món ăn"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_price_cart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100,000"
+            android:textSize="16sp"
+            android:layout_marginEnd="16dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end"
+        android:layout_marginTop="4dp">
+
+        <ImageButton
+            android:id="@+id/button_Add"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/food_add"
+            android:contentDescription="Add"
+            android:background="@drawable/food_button_background"
+            android:padding="4dp"
+            android:elevation="2dp" />
+
+        <TextView
+            android:id="@+id/tv_Quantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textSize="18sp"
+            android:layout_marginHorizontal="12dp"
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:layout_gravity="center"/>
+
+        <ImageButton
+            android:id="@+id/button_Subtract"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/food_minus"
+            android:contentDescription="Subtract"
+            android:background="@drawable/food_button_background"
+            android:padding="4dp"
+            android:elevation="2dp" />
+    </LinearLayout>
+
+</LinearLayout>
