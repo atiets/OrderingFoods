@@ -2,15 +2,12 @@ package com.example.orderingfoods.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -23,12 +20,8 @@ import com.example.orderingfoods.Adapter.FoodAdapter;
 import com.example.orderingfoods.Models.Category;
 import com.example.orderingfoods.Models.Food;
 import com.example.orderingfoods.R;
-import com.google.gson.Gson;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-
-import kotlin.Suppress;
 
 public class MenuActivity extends AppCompatActivity {
     //private ListView listView;
@@ -43,7 +36,7 @@ public class MenuActivity extends AppCompatActivity {
     private int quantity = 0;
     private double totalPrice = 0.0;
     private Button saveButton;
-    private ArrayList<Food> cart = new ArrayList<>();
+    private ArrayList<Food> selectedFoods;
 
 
     @Override
@@ -121,14 +114,17 @@ public class MenuActivity extends AppCompatActivity {
 //        categoryList.add(new Category(4,"Đồ Uống", "https://i.pinimg.com/236x/2e/35/b0/2e35b05638b83ae6bce185c25797dc6d.jpg", drinks));
 
 
+
+        selectedFoods = new ArrayList<>(); // Khởi tạo giỏ hàng rỗng
+
         // Khởi tạo adapter với danh sách món ăn
-        foodAdapter = new FoodAdapter(MenuActivity.this, R.layout.row_food_grid, allFoods, new FoodAdapter.OnQuantityChangeListener() {
+        foodAdapter = new FoodAdapter(MenuActivity.this, R.layout.row_food_grid, allFoods,  new FoodAdapter.OnQuantityChangeListener() {
             @Override
             public void onQuantityChanged(int totalQuantity, double totalPrice) {
                 textQty.setText("Qty: " + totalQuantity);
                 textTotal.setText("Total: " + totalPrice + " VND");
             }
-        });
+        }, selectedFoods);
         gridView_food.setAdapter(foodAdapter);
         listView_food.setAdapter(foodAdapter);
 
@@ -162,21 +158,65 @@ public class MenuActivity extends AppCompatActivity {
         gridView_food.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Lấy món ăn được chọn
                 Food selectedFood = allFoods.get(position);
+                boolean isFoodAlreadyInCart = false;
+                for (Food food : selectedFoods) {
+                    if (food.getId() == selectedFood.getId()) {
+                        food.setQuantity(food.getQuantity() + 1); // Tăng số lượng nếu món đã có trong giỏ hàng
+                        isFoodAlreadyInCart = true;
+                        break;
+                    }
+                }
 
-                cart.add(selectedFood);
+                System.out.println("ddd" + selectedFood);
 
+                if (!isFoodAlreadyInCart) {
+                    selectedFood.setQuantity(1); // Đặt số lượng là 1 nếu thêm món mới
+                    selectedFoods.add(selectedFood);
+                }
+
+                // Cập nhật lại thông tin giỏ hàng
+                textQty.setText("Qty: " + selectedFoods.size());
+                double totalPrice = 0.0;
+                for (Food food : selectedFoods) {
+                    totalPrice += food.getQuantity() * food.getPrice();
+                }
+                textTotal.setText("Total: " + totalPrice + " VND");
+
+                // Cập nhật giao diện giỏ hàng
+                foodAdapter.notifyDataSetChanged();
             }
         });
+
 
         listView_food.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // Lấy món ăn được chọn
                 Food selectedFood = allFoods.get(position);
+                boolean isFoodAlreadyInCart = false;
+                for (Food food : selectedFoods) {
+                    if (food.getId() == selectedFood.getId()) {
+                        food.setQuantity(food.getQuantity() + 1); // Tăng số lượng nếu món đã có trong giỏ hàng
+                        isFoodAlreadyInCart = true;
+                        break;
+                    }
+                }
 
-                cart.add(selectedFood);
+                if (!isFoodAlreadyInCart) {
+                    selectedFood.setQuantity(1); // Đặt số lượng là 1 nếu thêm món mới
+                    selectedFoods.add(selectedFood);
+                }
+
+                // Cập nhật lại thông tin giỏ hàng
+                textQty.setText("Qty: " + selectedFoods.size());
+                double totalPrice = 0.0;
+                for (Food food : selectedFoods) {
+                    totalPrice += food.getQuantity() * food.getPrice();
+                }
+                textTotal.setText("Total: " + totalPrice + " VND");
+
+                // Cập nhật giao diện giỏ hàng
+                foodAdapter.notifyDataSetChanged();
             }
         });
 
@@ -184,10 +224,20 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Category selectedCategory = categoryList.get(position);
-                // Update the food list for the selected category
-                foodAdapter.updateFoodList(selectedCategory.getFoodList());
-                // Optionally scroll to the top or refresh the view
-                gridView_food.smoothScrollToPosition(0);
+                ArrayList<Food> filteredFoods = new ArrayList<>();
+                for (Food food : allFoods) {
+                    if (food.getCategory().getId() == selectedCategory.getId()) {
+                        filteredFoods.add(food);
+                    }
+                }
+
+                // Update the adapter with the filtered list
+                foodAdapter.updateFoodList(filteredFoods);
+
+                // Optional: Highlight the selected category in the list
+                Food food = (Food) foodAdapter.getItem(position);
+                highlightCategory(food.getCategory().getId());
+                categoryAdapter.notifyDataSetChanged();
             }
         });
 
@@ -231,21 +281,17 @@ public class MenuActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Gson gson = new Gson();
-//                String cartJson = gson.toJson(cart);
-
-                // Cập nhật quantity và totalPrice
-//                int totalQuantity = cart.size();
-//                double totalPrice = 0.0;
-//                for (Food food : cart) {
-//                    totalPrice += food.getPrice();
-//                }
-
-                Intent intent = new Intent(MenuActivity.this, CartActivity.class);
-//                intent.putExtra("cartJson", cartJson);
-                intent.putExtra("totalQuantity", quantity);
-                intent.putExtra("totalPrice", totalPrice);
-                startActivity(intent);
+                if (selectedFoods.isEmpty()) {
+                    Toast.makeText(MenuActivity.this, "Giỏ hàng trống!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent intent = new Intent(MenuActivity.this, CartActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("selectedFoods", selectedFoods);
+                    intent.putExtras(bundle);
+                    intent.putExtra("totalQuantity", quantity);
+                    intent.putExtra("totalPrice", totalPrice);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -267,6 +313,11 @@ public class MenuActivity extends AppCompatActivity {
         }
     }
 
+    public void goToCart() {
+        Intent intent = new Intent(MenuActivity.this, CartActivity.class);
+        intent.putExtra("selectedFoods", selectedFoods); // Truyền danh sách món ăn đã chọn
+        startActivity(intent);
+    }
 
 
 }

@@ -10,35 +10,41 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.orderingfoods.Activity.CartActivity;
+import com.example.orderingfoods.Models.Cart;
 import com.example.orderingfoods.Models.Category;
 import com.example.orderingfoods.Models.Food;
 import com.example.orderingfoods.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CartAdapter extends BaseAdapter {
     private Context context;
     private int layout;
-    private List<Food> foodList;
-    private FoodAdapter.OnQuantityChangeListener quantityChangeListener;
+    private List<Cart> cartList;
+    private CartAdapter.OnQuantityChangeListener quantityChangeListener;
 
 
-    public CartAdapter(Context context, int layout, List<Food> foodList, FoodAdapter.OnQuantityChangeListener quantityChangeListener) {
+    public CartAdapter(Context context, int layout, List<Cart> cartList, CartAdapter.OnQuantityChangeListener quantityChangeListener) {
         this.context = context;
         this.layout = layout;
-        this.foodList = foodList;
+        this.cartList = cartList;
         this.quantityChangeListener = quantityChangeListener;
+    }
+
+    public CartAdapter(CartActivity context, ArrayList<Food> cart) {
     }
 
 
     @Override
     public int getCount() {
-        return foodList != null ? foodList.size() : 0;
+        return cartList != null ? cartList.size() : 0;
     }
 
     @Override
     public Object getItem(int position) {
-        return foodList != null ? foodList.get(position) : null;
+        return cartList != null ? cartList.get(position) : null;
     }
 
     @Override
@@ -60,9 +66,9 @@ public class CartAdapter extends BaseAdapter {
         int totalQuantity = 0;
         double totalPrice = 0.0;
 
-        for (Food food : foodList) {
-            totalQuantity += food.getQuantity();
-            totalPrice += food.getQuantity() * food.getPrice();
+        for (Cart cart : cartList) {
+            totalQuantity += cart.getQuantity();
+            totalPrice += cart.getQuantity() * cart.getPrice();
         }
 
         if (quantityChangeListener != null) {
@@ -72,13 +78,13 @@ public class CartAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        CartAdapter.ViewHolder viewHolder;
+        ViewHolder viewHolder;
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(layout, parent, false);
 
-            viewHolder = new CartAdapter.ViewHolder();
+            viewHolder = new ViewHolder();
             viewHolder.textName = convertView.findViewById(R.id.tv_name_cart);
             viewHolder.textPrice = convertView.findViewById(R.id.tv_price_cart);
             viewHolder.textQuantity = convertView.findViewById(R.id.tv_Quantity);
@@ -92,27 +98,27 @@ public class CartAdapter extends BaseAdapter {
 
 
 
-        Food food = foodList.get(position);
+        Cart cart = cartList.get(position);
 
         // Bind data to viewHolder
-        viewHolder.textName.setText(food.getName());
-        viewHolder.textPrice.setText("Giá: " + food.getPrice() + " VND");
-        viewHolder.textQuantity.setText(String.valueOf(food.getQuantity()));
+        viewHolder.textName.setText(cart.getName());
+        viewHolder.textPrice.setText("Giá: " + cart.getPrice() + " VND");
+        viewHolder.textQuantity.setText(String.valueOf(cart.getQuantity()));
 
         // Handle add button click
         viewHolder.buttonAdd.setOnClickListener(v -> {
-            int currentQuantity = food.getQuantity();
-            food.setQuantity(currentQuantity + 1);
-            viewHolder.textQuantity.setText(String.valueOf(food.getQuantity()));
+            int currentQuantity = cart.getQuantity();
+            cart.setQuantity(currentQuantity + 1);
+            viewHolder.textQuantity.setText(String.valueOf(cart.getQuantity()));
             updateTotal();
         });
 
         // Handle subtract button click
         viewHolder.buttonSubtract.setOnClickListener(v -> {
-            int currentQuantity = food.getQuantity();
+            int currentQuantity = cart.getQuantity();
             if (currentQuantity > 0) {
-                food.setQuantity(currentQuantity - 1);
-                viewHolder.textQuantity.setText(String.valueOf(food.getQuantity()));
+                cart.setQuantity(currentQuantity - 1);
+                viewHolder.textQuantity.setText(String.valueOf(cart.getQuantity()));
                 updateTotal();
             }
         });
