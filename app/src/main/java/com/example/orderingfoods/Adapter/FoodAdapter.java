@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.example.orderingfoods.Models.Food;
 import com.example.orderingfoods.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FoodAdapter extends BaseAdapter {
@@ -20,20 +21,33 @@ public class FoodAdapter extends BaseAdapter {
     private int layout;
     private List<Food> foodList;
     private OnQuantityChangeListener quantityChangeListener;
+//    private ArrayList<Food> cart;
+    private  ArrayList<Food> selectedFoods;
+
 
 
     // Constructor
-    public FoodAdapter(Context context, int layout, List<Food> foodList, OnQuantityChangeListener quantityChangeListener) {
+    public FoodAdapter(Context context, int layout, List<Food> foodList, OnQuantityChangeListener quantityChangeListener, ArrayList<Food> selectedFoods) {
         this.context = context;
         this.layout = layout;
         this.foodList = foodList;
         this.quantityChangeListener = quantityChangeListener;
+        this.selectedFoods = selectedFoods;
+
     }
 
     public void updateFoodList(List<Food> newFoodList) {
         this.foodList = newFoodList;
         notifyDataSetChanged();
     }
+
+//    public void updateData(ArrayList<Food> newFoodList) {
+//        this.foodList.clear();
+//        this.foodList.addAll(newFoodList);
+//        notifyDataSetChanged();
+//    }
+
+
 
     @Override
     public int getCount() {
@@ -81,7 +95,7 @@ public class FoodAdapter extends BaseAdapter {
 
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(layout, parent, false);
+            convertView = inflater.inflate(R.layout.row_food_grid, parent, false);
 
             viewHolder = new ViewHolder();
             viewHolder.textName = convertView.findViewById(R.id.tv_NameTitle);
@@ -100,7 +114,7 @@ public class FoodAdapter extends BaseAdapter {
 
 
         Food food = foodList.get(position);
-
+        System.out.println("foood" + food);
         // Bind data to viewHolder
         viewHolder.textName.setText(food.getName());
         viewHolder.textDesc.setText(food.getDescription());
@@ -120,15 +134,27 @@ public class FoodAdapter extends BaseAdapter {
             food.setQuantity(currentQuantity + 1);
             viewHolder.textQuantity.setText(String.valueOf(food.getQuantity()));
             updateTotal();
+
+            if (selectedFoods != null && !selectedFoods.contains(food)) {
+                selectedFoods.add(food);
+            }
+
+
+
         });
 
-        // Handle subtract button clicka
+        // Handle subtract button click
         viewHolder.buttonSubtract.setOnClickListener(v -> {
             int currentQuantity = food.getQuantity();
             if (currentQuantity > 0) {
                 food.setQuantity(currentQuantity - 1);
                 viewHolder.textQuantity.setText(String.valueOf(food.getQuantity()));
                 updateTotal();
+
+                if (selectedFoods != null && food.getQuantity() == 0) {
+                    selectedFoods.remove(food);
+                }
+
             }
         });
 
