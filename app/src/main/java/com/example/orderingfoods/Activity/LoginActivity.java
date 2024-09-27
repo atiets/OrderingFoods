@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                 userFound = true;
                 if (user.getPassword().equals(userPassword)) {
                     // Đăng nhập thành công
-                    Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, TableActivity.class);
                     intent.putExtra("username", user.getUsername());
                     Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
                     startActivity(intent);

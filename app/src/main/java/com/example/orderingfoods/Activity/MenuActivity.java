@@ -33,7 +33,7 @@ public class MenuActivity extends AppCompatActivity {
     private ArrayList<Category> categoryList;
     private CategoryAdapter categoryAdapter;
     private TextView textQty, textTotal;
-    private int quantity = 0;
+    public int quantity = 0;
     private double totalPrice = 0.0;
     private Button saveButton;
     private ArrayList<Food> selectedFoods;
