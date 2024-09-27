@@ -36,6 +36,11 @@
         </activity>
 
         <activity
+            android:name=".Activity.TableActivity"
+            android:exported="true">
+        </activity>
+
+        <activity
             android:name=".Activity.MenuActivity"
             android:exported="true">
         </activity>
