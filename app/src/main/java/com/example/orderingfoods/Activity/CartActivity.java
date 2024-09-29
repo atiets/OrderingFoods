@@ -28,7 +28,8 @@ public class CartActivity extends AppCompatActivity {
     private ListView listView;
     private FoodAdapter foodAdapter;
     private ArrayList<Food> selectedFoods;
-
+    private int quantity = 0;
+    private double totalPrice = 0.0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +47,10 @@ public class CartActivity extends AppCompatActivity {
         textTotal = findViewById(R.id.text_total);
         listView = findViewById(R.id.listview_cart);
 
-        int quantity = getIntent().getIntExtra("quantity", 0);
-        double totalPrice = getIntent().getDoubleExtra("totalPrice", 0.0);
-
+        for (Food food : selectedFoods) {
+            quantity += food.getQuantity();
+            totalPrice += food.getQuantity() * food.getPrice();
+        }
 
         textQty.setText("Số lượng: " + quantity);
         textTotal.setText("Tổng tiền: " + totalPrice + " VND");
@@ -59,14 +61,38 @@ public class CartActivity extends AppCompatActivity {
         }
 
         // Khởi tạo ListView hoặc RecyclerView để hiển thị giỏ hàng
-        ListView listViewCart = findViewById(R.id.listview_cart);
         foodAdapter = new FoodAdapter(this, R.layout.row_food_cart, selectedFoods, new FoodAdapter.OnQuantityChangeListener() {
             @Override
-            public void onQuantityChanged(int totalQuantity, double totalPrice) {
+            public void onQuantityChanged(int quanlity, double totalPrice) {
                 // Cập nhật giao diện nếu cần
+                textQty.setText("Số lượng: " + quanlity);
+                textTotal.setText("Tổng tiền: " + totalPrice + " VND");
             }
         }, selectedFoods); // Truyền cùng danh sách selectedFoods để có thể cập nhật nếu cần
 
-        listViewCart.setAdapter(foodAdapter);
+        listView.setAdapter(foodAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Food selectedFood = selectedFoods.get(position);
+                System.out.println("selec"+ selectedFood);
+                selectedFood.setQuantity(selectedFood.getQuantity() + 1);
+                double totalPrice = 0.0;
+                int quantity = 0;
+                for (Food food : selectedFoods) {
+                    quantity += food.getQuantity();
+                    totalPrice += food.getQuantity() * food.getPrice();
+                }
+                textQty.setText("Số lượng: " + quantity);
+                textTotal.setText("Tổng tiền: " + totalPrice + " VND");
+
+                // Cập nhật giao diện giỏ hàng
+                foodAdapter.notifyDataSetChanged();
+            }
+        });
+
+
+
     }
 }
