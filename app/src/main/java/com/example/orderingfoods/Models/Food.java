@@ -10,16 +10,18 @@ public class Food implements Serializable {
     private double price;
     private String imageUrl;
     private int quantity;
-    private Category category; // Thêm thuộc tính Category
+    private Category category;
+    private String note;
 
-    public Food(int id, String name, String description, double price, String imageUrl, int quantity, Category category) {
+    public Food(int id, String name, String description, double price, String imageUrl, int quantity, Category category, String note) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.imageUrl = imageUrl;
         this.quantity = quantity;
-        this.category = category; // Khởi tạo category
+        this.category = category;
+        this.note = note;
     }
 
     public Food() {}
@@ -78,5 +80,13 @@ public class Food implements Serializable {
 
     public void setCategory(Category category) { // Thêm phương thức setCategory
         this.category = category;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

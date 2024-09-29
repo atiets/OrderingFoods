@@ -50,12 +50,12 @@ public class TableActivity extends AppCompatActivity {
                 textViewNum = view.findViewById(R.id.textViewNum);
 
                 textViewNumGuests.setText(String.valueOf(selectedTable.getNumberOfGuests()));
-                textViewNum.setText(String.valueOf("Bàn " + selectedTable.getTableId()));
+                textViewNum.setText(String.valueOf(selectedTable.getTableId()));
 
                 // Hiển thị trạng thái bàn
                 Toast.makeText(TableActivity.this, "Bàn " + selectedTable.getTableId() + ": " + selectedTable.getStatus(), Toast.LENGTH_SHORT).show();
 
-                if (selectedTable.getStatus().equals("Trống")) {
+                if (selectedTable.getStatus().equals("Trống") || selectedTable.getStatus().equals("Đã đặt")) {
                     showAddNumberDialog(selectedTable);
                 }
             }
@@ -64,19 +64,36 @@ public class TableActivity extends AppCompatActivity {
 
         tableArrayList.add(new Table(1, "Trống", 0));
         tableArrayList.add(new Table(2, "Đã đặt", 4));
-        tableArrayList.add(new Table(3, "Đang phục vụ", 2));
+        tableArrayList.add(new Table(3, "Trống", 0));
         tableArrayList.add(new Table(4, "Trống", 0));
-        tableArrayList.add(new Table(5, "Đang phục vụ", 5));
+        tableArrayList.add(new Table(5, "Trống", 0));
         tableArrayList.add(new Table(6, "Trống", 0));
         tableArrayList.add(new Table(7, "Đã đặt", 3));
         tableArrayList.add(new Table(8, "Trống", 0));
-        tableArrayList.add(new Table(9, "Đang phục vụ", 6));
+        tableArrayList.add(new Table(9, "Trống", 0));
         tableArrayList.add(new Table(10, "Trống", 0));
-        tableArrayList.add(new Table(11, "Đang phục vụ", 4));
+        tableArrayList.add(new Table(11, "Trống", 0));
         tableArrayList.add(new Table(12, "Trống", 0));
         tableArrayList.add(new Table(13, "Trống", 0));
-        tableArrayList.add(new Table(14, "Đang phục vụ", 2));
+        tableArrayList.add(new Table(14, "Trống", 0));
         tableArrayList.add(new Table(15, "Trống", 0));
+
+        tableArrayList.add(new Table(16, "Trống", 0));
+        tableArrayList.add(new Table(17, "Đã đặt", 2));
+        tableArrayList.add(new Table(18, "Trống", 0));
+        tableArrayList.add(new Table(19, "Trống", 0));
+        tableArrayList.add(new Table(20, "Trống", 0));
+        tableArrayList.add(new Table(21, "Trống", 0));
+        tableArrayList.add(new Table(22, "Đã đặt", 1));
+        tableArrayList.add(new Table(23, "Trống", 0));
+        tableArrayList.add(new Table(24, "Trống", 0));
+        tableArrayList.add(new Table(25, "Trống", 0));
+        tableArrayList.add(new Table(26, "Trống", 0));
+        tableArrayList.add(new Table(27, "Đã đặt", 4));
+        tableArrayList.add(new Table(28, "Trống", 0));
+        tableArrayList.add(new Table(29, "Trống", 0));
+        tableArrayList.add(new Table(30, "Trống", 0));
+
 
     }
 
@@ -89,6 +106,10 @@ public class TableActivity extends AppCompatActivity {
         EditText edtNumGuests = dialogView.findViewById(R.id.edt_numGuests);
         Button buttonSave = dialogView.findViewById(R.id.button_save);
         Button buttonCancel = dialogView.findViewById(R.id.button_cancel);
+
+        if (selectedTable.getStatus().equals("Đã đặt")) {
+            edtNumGuests.setText(String.valueOf(selectedTable.getNumberOfGuests()));
+        }
 
         AlertDialog dialog = builder.create();
 
@@ -113,5 +134,12 @@ public class TableActivity extends AppCompatActivity {
         buttonCancel.setOnClickListener(v -> dialog.dismiss());
 
         dialog.show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Cập nhật lại adapter khi quay lại
+        tableAdapter.notifyDataSetChanged();
     }
 }

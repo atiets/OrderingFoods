@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
+
 import com.example.orderingfoods.Models.Table;
 import com.example.orderingfoods.R;
 
@@ -62,22 +64,22 @@ public class TableAdapter extends BaseAdapter {
 
         Table table = tableList.get(position);
         viewHolder.textViewNumGuests.setText(String.valueOf(table.getNumberOfGuests()));
-        viewHolder.textViewNum.setText(String.valueOf("Bàn " + table.getTableId()));
+        viewHolder.textViewNum.setText(String.valueOf(table.getTableId()));
 
-        convertView.setBackgroundColor(context.getResources().getColor(R.color.default_color)); // Đặt lại thành màu mặc định
+        CardView cardView = convertView.findViewById(R.id.card_view);
 
         switch (table.getStatus()) {
             case "Trống":
-                convertView.setBackgroundColor(context.getResources().getColor(R.color.default_color)); // Màu mặc định
+                cardView.setCardBackgroundColor(context.getResources().getColor(R.color.default_color));
                 break;
             case "Đã đặt":
-                convertView.setBackgroundColor(context.getResources().getColor(R.color.red));
+                cardView.setCardBackgroundColor(context.getResources().getColor(R.color.red));
                 break;
             case "Đang phục vụ":
-                convertView.setBackgroundColor(context.getResources().getColor(R.color.green));
+                cardView.setCardBackgroundColor(context.getResources().getColor(R.color.green));
                 break;
             default:
-                convertView.setBackgroundColor(context.getResources().getColor(R.color.default_color));
+                cardView.setCardBackgroundColor(context.getResources().getColor(R.color.default_color));
                 break;
         }
 

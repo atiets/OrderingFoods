@@ -1,10 +1,13 @@
 package com.example.orderingfoods.Adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,7 +24,6 @@ public class FoodAdapter extends BaseAdapter {
     private int layout;
     private List<Food> foodList;
     private OnQuantityChangeListener quantityChangeListener;
-//    private ArrayList<Food> cart;
     private  ArrayList<Food> selectedFoods;
 
 
@@ -35,19 +37,6 @@ public class FoodAdapter extends BaseAdapter {
         this.selectedFoods = selectedFoods;
 
     }
-
-    public void updateFoodList(List<Food> newFoodList) {
-        this.foodList = newFoodList;
-        notifyDataSetChanged();
-    }
-
-//    public void updateData(ArrayList<Food> newFoodList) {
-//        this.foodList.clear();
-//        this.foodList.addAll(newFoodList);
-//        notifyDataSetChanged();
-//    }
-
-
 
     @Override
     public int getCount() {
@@ -158,6 +147,49 @@ public class FoodAdapter extends BaseAdapter {
             }
         });
 
+        ImageButton buttonNote = convertView.findViewById(R.id.button_Note);
+        buttonNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddNoteDialog(parent.getContext(), position);
+            }
+        });
+
         return convertView;
+    }
+
+    private void showAddNoteDialog(Context context, int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View dialogView = LayoutInflater.from(context).inflate(R.layout.diag_add_note, null);
+        builder.setView(dialogView);
+
+        EditText editTextNote = dialogView.findViewById(R.id.edt_note);
+        Button buttonSave = dialogView.findViewById(R.id.button_save);
+        Button buttonCancel = dialogView.findViewById(R.id.button_cancel);
+
+        // Đặt ghi chú hiện tại (nếu có)
+        editTextNote.setText(foodList.get(position).getNote());
+
+        AlertDialog dialog = builder.create();
+
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String note = editTextNote.getText().toString().trim();
+                if (!note.isEmpty()) {
+                    foodList.get(position).setNote(note); // Cập nhật ghi chú cho món ăn
+                }
+                dialog.dismiss();
+            }
+        });
+
+        buttonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss(); // Đóng dialog khi nhấn Cancel
+            }
+        });
+
+        dialog.show();
     }
 }
