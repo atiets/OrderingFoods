@@ -20,6 +20,7 @@ import com.example.orderingfoods.Adapter.CategoryAdapter;
 import com.example.orderingfoods.Adapter.FoodAdapter;
 import com.example.orderingfoods.Models.Category;
 import com.example.orderingfoods.Models.Food;
+import com.example.orderingfoods.Models.Table;
 import com.example.orderingfoods.R;
 
 import java.util.ArrayList;
@@ -38,13 +39,20 @@ public class MenuActivity extends AppCompatActivity {
     private Button saveButton;
     private ArrayList<Food> selectedFoods;
     private ImageButton btnBack;
+    private Table currentTable;
+    private static final int REQUEST_CODE_CART = 1;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setContentView(R.layout.activity_foods_list);
-        setContentView(R.layout.activity_menu_category);
+        setContentView(R.layout.activity_menu);
+        int numGuests = getIntent().getIntExtra("numGuests", 0);
+        currentTable = (Table) getIntent().getSerializableExtra("currentTable");
+        if (currentTable != null) {
+            int tableId = currentTable.getTableId();
+        }
 
         layoutSpinner = findViewById(R.id.layout_spinner);
         listView_cate = findViewById(R.id.listview_category);
@@ -294,7 +302,10 @@ public class MenuActivity extends AppCompatActivity {
                     intent.putExtras(bundle);
                     intent.putExtra("totalQuantity", quantity);
                     intent.putExtra("totalPrice", totalPrice);
-                    startActivity(intent);
+                    intent.putExtra("currentTable", currentTable);
+                    intent.putExtra("numGuests", numGuests);
+                    startActivityForResult(intent, REQUEST_CODE_CART);
+                    //startActivity(intent);
                 }
             }
         });

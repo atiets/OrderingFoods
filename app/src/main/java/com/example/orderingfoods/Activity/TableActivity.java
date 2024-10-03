@@ -2,6 +2,7 @@ package com.example.orderingfoods.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Adapter;
@@ -12,10 +13,12 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.orderingfoods.Adapter.TableAdapter;
+import com.example.orderingfoods.Models.Food;
 import com.example.orderingfoods.Models.Table;
 import com.example.orderingfoods.Models.User;
 import com.example.orderingfoods.R;
@@ -27,6 +30,7 @@ public class TableActivity extends AppCompatActivity {
     private ArrayList<Table> tableArrayList;
     TableAdapter tableAdapter;
     TextView textViewNumGuests, textViewNum, textViewName;
+    private static final int REQUEST_CODE_CART = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +101,26 @@ public class TableActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_CART && resultCode == RESULT_OK && data != null) {
+            // Nhận thông tin bàn đã cập nhật
+            int tablePosition = data.getIntExtra("tablePosition", -1);
+            int numGuests = data.getIntExtra("numGuests", 0);
+            String status = data.getStringExtra("status");
+
+            // Cập nhật bàn trong TableAdapter
+            if (tablePosition != -1) {
+                Table updatedTable = tableArrayList.get(tablePosition); // Dùng tablePosition để lấy bàn đã cập nhật
+                updatedTable.setNumberOfGuests(numGuests);
+                updatedTable.setStatus(status);
+                tableAdapter.notifyDataSetChanged(); // Cập nhật giao diện
+            }
+        }
+    }
+
+
     private void showAddNumberDialog(Table selectedTable) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LayoutInflater inflater = getLayoutInflater();
@@ -123,8 +147,12 @@ public class TableActivity extends AppCompatActivity {
 
                 Intent intent = new Intent(TableActivity.this, MenuActivity.class);
                 intent.putExtra("table_id", selectedTable.getTableId());
-                startActivity(intent);
+                intent.putExtra("currentTable", selectedTable);
+                intent.putExtra("numGuests", numGuests);
+                startActivityForResult(intent, REQUEST_CODE_CART);
                 dialog.dismiss();
+
+                startActivity(intent);
             } else {
                 Toast.makeText(this, "Vui lòng nhập số lượng khách", Toast.LENGTH_SHORT).show();
             }

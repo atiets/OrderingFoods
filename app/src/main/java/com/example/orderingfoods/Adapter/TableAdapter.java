@@ -85,4 +85,11 @@ public class TableAdapter extends BaseAdapter {
 
         return convertView;
     }
+
+    public void updateTable(int position, int numGuests, String status) {
+        Table table = tableList.get(position);
+        table.setNumberOfGuests(numGuests);
+        table.setStatus(status);
+        notifyDataSetChanged();
+    }
 }
