@@ -40,7 +40,7 @@ public class TableActivity extends AppCompatActivity {
         gridView = findViewById(R.id.gridview_tables);
         textViewName = findViewById(R.id.tv_NameTitle_table);
 
-        ArrayList<Table> tableArrayList = new ArrayList<>();
+        tableArrayList = new ArrayList<>();
 
         tableAdapter = new TableAdapter(TableActivity.this, R.layout.row_table, tableArrayList);
         gridView.setAdapter(tableAdapter);
@@ -61,65 +61,73 @@ public class TableActivity extends AppCompatActivity {
 
                 if (selectedTable.getStatus().equals("Trống") || selectedTable.getStatus().equals("Đã đặt")) {
                     showAddNumberDialog(selectedTable);
+                }else if (selectedTable.getStatus().equals("Đang phục vụ")) {
+                    // Khởi chạy BillActivity để hiển thị hóa đơn
+                    Intent intent = new Intent(TableActivity.this, BillActivity.class);
+                    intent.putExtra("currentTable", selectedTable);
+                    startActivity(intent);
                 }
             }
         });
 
-
-        tableArrayList.add(new Table(1, "Trống", 0));
-        tableArrayList.add(new Table(2, "Đã đặt", 4));
-        tableArrayList.add(new Table(3, "Trống", 0));
-        tableArrayList.add(new Table(4, "Trống", 0));
-        tableArrayList.add(new Table(5, "Trống", 0));
-        tableArrayList.add(new Table(6, "Trống", 0));
-        tableArrayList.add(new Table(7, "Đã đặt", 3));
-        tableArrayList.add(new Table(8, "Trống", 0));
-        tableArrayList.add(new Table(9, "Trống", 0));
-        tableArrayList.add(new Table(10, "Trống", 0));
-        tableArrayList.add(new Table(11, "Trống", 0));
-        tableArrayList.add(new Table(12, "Trống", 0));
-        tableArrayList.add(new Table(13, "Trống", 0));
-        tableArrayList.add(new Table(14, "Trống", 0));
-        tableArrayList.add(new Table(15, "Trống", 0));
-
-        tableArrayList.add(new Table(16, "Trống", 0));
-        tableArrayList.add(new Table(17, "Đã đặt", 2));
-        tableArrayList.add(new Table(18, "Trống", 0));
-        tableArrayList.add(new Table(19, "Trống", 0));
-        tableArrayList.add(new Table(20, "Trống", 0));
-        tableArrayList.add(new Table(21, "Trống", 0));
-        tableArrayList.add(new Table(22, "Đã đặt", 1));
-        tableArrayList.add(new Table(23, "Trống", 0));
-        tableArrayList.add(new Table(24, "Trống", 0));
-        tableArrayList.add(new Table(25, "Trống", 0));
-        tableArrayList.add(new Table(26, "Trống", 0));
-        tableArrayList.add(new Table(27, "Đã đặt", 4));
-        tableArrayList.add(new Table(28, "Trống", 0));
-        tableArrayList.add(new Table(29, "Trống", 0));
-        tableArrayList.add(new Table(30, "Trống", 0));
-
+        tableArrayList.add(new Table(1, "Trống", 0, null));
+        tableArrayList.add(new Table(2, "Đã đặt", 4, null));
+        tableArrayList.add(new Table(3, "Trống", 0, null));
+        tableArrayList.add(new Table(4, "Trống", 0, null));
+        tableArrayList.add(new Table(5, "Trống", 0, null));
+        tableArrayList.add(new Table(6, "Trống", 0, null));
+        tableArrayList.add(new Table(7, "Đã đặt", 3, null));
+        tableArrayList.add(new Table(8, "Trống", 0, null));
+        tableArrayList.add(new Table(9, "Trống", 0, null));
+        tableArrayList.add(new Table(10, "Trống", 0, null));
+        tableArrayList.add(new Table(11, "Trống", 0, null));
+        tableArrayList.add(new Table(12, "Trống", 0, null));
+        tableArrayList.add(new Table(13, "Trống", 0, null));
+        tableArrayList.add(new Table(14, "Trống", 0, null));
+        tableArrayList.add(new Table(15, "Trống", 0, null));
+        tableArrayList.add(new Table(16, "Trống", 0, null));
+        tableArrayList.add(new Table(17, "Đã đặt", 2, null));
+        tableArrayList.add(new Table(18, "Trống", 0, null));
+        tableArrayList.add(new Table(19, "Trống", 0, null));
+        tableArrayList.add(new Table(20, "Trống", 0, null));
+        tableArrayList.add(new Table(21, "Trống", 0, null));
+        tableArrayList.add(new Table(22, "Đã đặt", 1, null));
+        tableArrayList.add(new Table(23, "Trống", 0, null));
+        tableArrayList.add(new Table(24, "Trống", 0, null));
+        tableArrayList.add(new Table(25, "Trống", 0, null));
+        tableArrayList.add(new Table(26, "Trống", 0, null));
+        tableArrayList.add(new Table(27, "Đã đặt", 4, null));
+        tableArrayList.add(new Table(28, "Trống", 0, null));
+        tableArrayList.add(new Table(29, "Trống", 0, null));
+        tableArrayList.add(new Table(30, "Trống", 0, null));
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == REQUEST_CODE_CART && resultCode == RESULT_OK && data != null) {
             // Nhận thông tin bàn đã cập nhật
             int tablePosition = data.getIntExtra("tablePosition", -1);
             int numGuests = data.getIntExtra("numGuests", 0);
             String status = data.getStringExtra("status");
+            ArrayList<Food> selectedFoods = (ArrayList<Food>) data.getSerializableExtra("selectedFoods");
 
             // Cập nhật bàn trong TableAdapter
             if (tablePosition != -1) {
                 Table updatedTable = tableArrayList.get(tablePosition); // Dùng tablePosition để lấy bàn đã cập nhật
                 updatedTable.setNumberOfGuests(numGuests);
                 updatedTable.setStatus(status);
+
+                if (selectedFoods != null) {
+                    updatedTable.setOrderedFoods(selectedFoods);
+                }
+
                 tableAdapter.notifyDataSetChanged(); // Cập nhật giao diện
             }
         }
     }
-
 
     private void showAddNumberDialog(Table selectedTable) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -142,6 +150,7 @@ public class TableActivity extends AppCompatActivity {
             if (!numGuestsString.isEmpty()) {
                 int numGuests = Integer.parseInt(numGuestsString);
                 selectedTable.setNumberOfGuests(numGuests);
+
                 selectedTable.setStatus("Đang phục vụ");
                 tableAdapter.notifyDataSetChanged(); // Cập nhật giao diện
 

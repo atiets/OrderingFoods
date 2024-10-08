@@ -24,10 +24,10 @@
             android:layout_gravity="start" />
 
         <Button
-            android:id="@+id/button_print"
+            android:id="@+id/button_table"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:text="Print"
+            android:text="Table"
             android:textColor="@android:color/white"
             android:background="@drawable/rounded_button"
             android:padding="8dp"

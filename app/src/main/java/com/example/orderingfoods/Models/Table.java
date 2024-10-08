@@ -7,11 +7,13 @@ public class Table implements Serializable{
     private int tableId;
     private String status; // Trạng thái: "Trống", "Đã đặt", "Đang phục vụ"
     private int numberOfGuests;
+    private ArrayList<Food> orderedFoods;
 
-    public Table(int tableId, String status, int numberOfGuests) {
+    public Table(int tableId, String status, int numberOfGuests, ArrayList orderedFoods) {
         this.tableId = tableId;
         this.status = status;
         this.numberOfGuests = numberOfGuests;
+        this.orderedFoods = orderedFoods;
     }
 
     public int getTableId() {
@@ -32,6 +34,18 @@ public class Table implements Serializable{
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void setTableId(int tableId) {
+        this.tableId = tableId;
+    }
+
+    public ArrayList<Food> getOrderedFoods() {
+        return orderedFoods;
+    }
+
+    public void setOrderedFoods(ArrayList<Food> orderedFoods) {
+        this.orderedFoods = orderedFoods;
     }
 }
 
