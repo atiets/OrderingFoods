@@ -2,6 +2,7 @@ package com.example.orderingfoods.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -46,13 +47,16 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_foods_list);
         setContentView(R.layout.activity_menu);
+
         int numGuests = getIntent().getIntExtra("numGuests", 0);
         currentTable = (Table) getIntent().getSerializableExtra("currentTable");
+
+        int tableId = -1;
         if (currentTable != null) {
-            int tableId = currentTable.getTableId();
+            tableId = currentTable.getTableId();
         }
+        Log.d("MenuActivity", "Table ID: " + tableId);
 
         layoutSpinner = findViewById(R.id.layout_spinner);
         listView_cate = findViewById(R.id.listview_category);
@@ -117,14 +121,6 @@ public class MenuActivity extends AppCompatActivity {
         categoryList.add(mainDishesCategory);
         categoryList.add(dessertsCategory);
         categoryList.add(drinksCategory);
-//        // Tạo danh sách category
-//        categoryList = new ArrayList<>();
-//        categoryList.add(new Category(1, "Khai Vị", "https://i.pinimg.com/originals/e3/17/84/e3178427da26d961a06e45d74c64fbd1.png", starters));
-//        categoryList.add(new Category(2,"Món Chính", "https://i.pinimg.com/originals/5b/77/5e/5b775eebdfc865b15e39f92e11e22782.jpg", mainDishes));
-//        categoryList.add(new Category(3,"Tráng Miệng", "https://i.pinimg.com/564x/0e/8f/aa/0e8faa1c4eec14cf3012c23da3c7ec34.jpg", desserts));
-//        categoryList.add(new Category(4,"Đồ Uống", "https://i.pinimg.com/236x/2e/35/b0/2e35b05638b83ae6bce185c25797dc6d.jpg", drinks));
-
-
 
         selectedFoods = new ArrayList<>();
         int layout = R.layout.row_food_grid;
@@ -149,13 +145,10 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedLayout = parent.getItemAtPosition(position).toString();
-                int layout = R.layout.row_food_grid;
                 if(selectedLayout.equals("Grid View")) {
-                    layout = R.layout.row_food_grid;
                     gridView_food.setVisibility(View.VISIBLE);
                     listView_food.setVisibility(View.GONE);
                 } else if (selectedLayout.equals("List View")) {
-                    layout = R.layout.row_food_list;
                     listView_food.setVisibility(View.VISIBLE);
                     gridView_food.setVisibility(View.GONE);
                 }
@@ -179,8 +172,6 @@ public class MenuActivity extends AppCompatActivity {
                         break;
                     }
                 }
-
-                System.out.println("ddd" + selectedFood);
 
                 if (!isFoodAlreadyInCart) {
                     selectedFood.setQuantity(1); // Đặt số lượng là 1 nếu thêm món mới
@@ -231,27 +222,6 @@ public class MenuActivity extends AppCompatActivity {
                 foodAdapter.notifyDataSetChanged();
             }
         });
-
-//        listView_cate.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Category selectedCategory = categoryList.get(position);
-//                ArrayList<Food> filteredFoods = new ArrayList<>();
-//                for (Food food : allFoods) {
-//                    if (food.getCategory().getId() == selectedCategory.getId()) {
-//                        filteredFoods.add(food);
-//                    }
-//                }
-//
-//                // Update the adapter with the filtered list
-//                foodAdapter.updateFoodList(filteredFoods);
-//
-//                // Optional: Highlight the selected category in the list
-//                Food food = (Food) foodAdapter.getItem(position);
-//                highlightCategory(food.getCategory().getId());
-//                categoryAdapter.notifyDataSetChanged();
-//            }
-//        });
 
         listView_food.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -304,8 +274,12 @@ public class MenuActivity extends AppCompatActivity {
                     intent.putExtra("totalPrice", totalPrice);
                     intent.putExtra("currentTable", currentTable);
                     intent.putExtra("numGuests", numGuests);
+                    if (currentTable != null) {
+                        int tableId = currentTable.getTableId();
+                        intent.putExtra("tableId", tableId);
+                    }
+
                     startActivityForResult(intent, REQUEST_CODE_CART);
-                    //startActivity(intent);
                 }
             }
         });
@@ -313,12 +287,9 @@ public class MenuActivity extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onBackPressed(); // Hoặc bạn có thể gọi một Activity khác
+                onBackPressed();
             }
         });
-
-
-
     }
 
     private void highlightCategory(int categoryId) {
@@ -335,6 +306,4 @@ public class MenuActivity extends AppCompatActivity {
 
         }
     }
-
-
 }
