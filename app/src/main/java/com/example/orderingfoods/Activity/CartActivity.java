@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.orderingfoods.Adapter.CartAdapter;
 import com.example.orderingfoods.Adapter.FoodAdapter;
+import com.example.orderingfoods.Data.DatabaseHandler;
 import com.example.orderingfoods.Models.Food;
 import com.example.orderingfoods.Models.Table;
 import com.example.orderingfoods.R;
@@ -50,7 +51,9 @@ public class CartActivity extends AppCompatActivity {
         }
 
         int numGuests = getIntent().getIntExtra("numGuests", 0);
+        int tableId = getIntent().getIntExtra("tableId", -1);
 
+        DatabaseHandler databaseHandler = new DatabaseHandler(this);
         textQty = findViewById(R.id.text_qty);
         textTotal = findViewById(R.id.text_total);
         listView = findViewById(R.id.listview_cart);
@@ -102,55 +105,11 @@ public class CartActivity extends AppCompatActivity {
         });
 
         btnSave.setOnClickListener(v -> {
-            currentTable = (Table) getIntent().getSerializableExtra("currentTable"); // Nhận currentTable từ Intent
-            int tablePosition = getIntent().getIntExtra("tablePosition", -1);
-
-            if (currentTable != null) {
-                currentTable.setNumberOfGuests(numGuests);
-                currentTable.setOrderedFoods(selectedFoods);
-                currentTable.setStatus("Đang phục vụ");
-
-                Intent returnIntent = new Intent(CartActivity.this, TableActivity.class);
-                returnIntent.putExtra("tablePosition", tablePosition);
-                returnIntent.putExtra("updatedTable", currentTable);
-                returnIntent.putExtra("selectedFoods", selectedFoods);
-                returnIntent.putExtra("numGuests", numGuests);
-//                returnIntent.putExtra("status", currentTable.getStatus());
-                returnIntent.putExtra("status", "Đang phục vụ");
-
-                setResult(RESULT_OK, returnIntent);
-                    finish();
-            } else {
-                Toast.makeText(CartActivity.this, "Thông tin bàn không hợp lệ", Toast.LENGTH_SHORT).show();
-            }
+            databaseHandler.addOrder(selectedFoods, numGuests, tableId, "Đang phục vụ");
+            Intent intent = new Intent(CartActivity.this, TableActivity.class);
+            startActivity(intent);
+            finish();
         });
 
-        btnTable.setOnClickListener(v -> {
-            // Retrieve the current table and its position from the Intent
-            currentTable = (Table) getIntent().getSerializableExtra("currentTable");
-            int tablePosition = getIntent().getIntExtra("tablePosition", -1);
-
-            if (currentTable != null) {
-                // Update the current table's details
-                currentTable.setNumberOfGuests(numGuests);
-                currentTable.setOrderedFoods(selectedFoods);
-                currentTable.setStatus("Đang phục vụ");  // Set the table status as "Đang phục vụ" or as needed
-
-                // Create an intent to return to TableActivity with updated table data
-                Intent returnIntent = new Intent(CartActivity.this, TableActivity.class);
-                returnIntent.putExtra("updatedTable", currentTable);   // Pass back the updated table
-                returnIntent.putExtra("tablePosition", tablePosition); // Pass the table position back to identify which table to update
-                returnIntent.putExtra("selectedFoods", selectedFoods); // Pass the updated food list for the table
-                returnIntent.putExtra("numGuests", numGuests);         // Send back the number of guests
-                returnIntent.putExtra("status", "Đang phục vụ");       // Send back the updated table status
-
-                // Set the result to OK, notifying the TableActivity that the data is updated
-                setResult(RESULT_OK, returnIntent);
-                finish();  // Close the CartActivity and return to the TableActivity
-            } else {
-                // If the table information is invalid, show an error message
-                Toast.makeText(CartActivity.this, "Thông tin bàn không hợp lệ", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_name_bill"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="Tên món"
+            android:textSize="16sp"
+            android:textColor="#0040FF"
+            android:padding="8dp" />
+
+        <TextView
+            android:id="@+id/tv_Quantity_bill"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Số lượng"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:padding="8dp" />
+
+        <TextView
+            android:id="@+id/tv_totalPrice_bill"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Giá"
+            android:gravity="end"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:padding="8dp" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,6 +1,7 @@
 package com.example.orderingfoods.Activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +18,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.orderingfoods.Adapter.BillAdapter;
 import com.example.orderingfoods.Adapter.TableAdapter;
+import com.example.orderingfoods.Data.DatabaseHandler;
+import com.example.orderingfoods.Models.Cart;
 import com.example.orderingfoods.Models.Food;
 import com.example.orderingfoods.Models.Table;
 import com.example.orderingfoods.Models.User;
@@ -31,19 +35,24 @@ public class TableActivity extends AppCompatActivity {
     TableAdapter tableAdapter;
     TextView textViewNumGuests, textViewNum, textViewName;
     private static final int REQUEST_CODE_CART = 1;
+    DatabaseHandler databaseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_table);
+
+        databaseHandler = new DatabaseHandler(this);
+
         gridView = findViewById(R.id.gridview_tables);
         textViewName = findViewById(R.id.tv_NameTitle_table);
 
         tableArrayList = new ArrayList<>();
-
         tableAdapter = new TableAdapter(TableActivity.this, R.layout.row_table, tableArrayList);
         gridView.setAdapter(tableAdapter);
+
+        loadTablesFromDatabase();
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -64,69 +73,74 @@ public class TableActivity extends AppCompatActivity {
                 }else if (selectedTable.getStatus().equals("Đang phục vụ")) {
                     // Khởi chạy BillActivity để hiển thị hóa đơn
                     Intent intent = new Intent(TableActivity.this, BillActivity.class);
-                    intent.putExtra("currentTable", selectedTable);
+                    intent.putExtra("tableId", selectedTable.getTableId());
                     startActivity(intent);
                 }
             }
         });
 
-        tableArrayList.add(new Table(1, "Trống", 0, null));
-        tableArrayList.add(new Table(2, "Đã đặt", 4, null));
-        tableArrayList.add(new Table(3, "Trống", 0, null));
-        tableArrayList.add(new Table(4, "Trống", 0, null));
-        tableArrayList.add(new Table(5, "Trống", 0, null));
-        tableArrayList.add(new Table(6, "Trống", 0, null));
-        tableArrayList.add(new Table(7, "Đã đặt", 3, null));
-        tableArrayList.add(new Table(8, "Trống", 0, null));
-        tableArrayList.add(new Table(9, "Trống", 0, null));
-        tableArrayList.add(new Table(10, "Trống", 0, null));
-        tableArrayList.add(new Table(11, "Trống", 0, null));
-        tableArrayList.add(new Table(12, "Trống", 0, null));
-        tableArrayList.add(new Table(13, "Trống", 0, null));
-        tableArrayList.add(new Table(14, "Trống", 0, null));
-        tableArrayList.add(new Table(15, "Trống", 0, null));
-        tableArrayList.add(new Table(16, "Trống", 0, null));
-        tableArrayList.add(new Table(17, "Đã đặt", 2, null));
-        tableArrayList.add(new Table(18, "Trống", 0, null));
-        tableArrayList.add(new Table(19, "Trống", 0, null));
-        tableArrayList.add(new Table(20, "Trống", 0, null));
-        tableArrayList.add(new Table(21, "Trống", 0, null));
-        tableArrayList.add(new Table(22, "Đã đặt", 1, null));
-        tableArrayList.add(new Table(23, "Trống", 0, null));
-        tableArrayList.add(new Table(24, "Trống", 0, null));
-        tableArrayList.add(new Table(25, "Trống", 0, null));
-        tableArrayList.add(new Table(26, "Trống", 0, null));
-        tableArrayList.add(new Table(27, "Đã đặt", 4, null));
-        tableArrayList.add(new Table(28, "Trống", 0, null));
-        tableArrayList.add(new Table(29, "Trống", 0, null));
-        tableArrayList.add(new Table(30, "Trống", 0, null));
+        tableArrayList.add(new Table(31, "Trống", 0, null));
+        tableArrayList.add(new Table(32, "Đã đặt", 4, null));
+        tableArrayList.add(new Table(33, "Trống", 0, null));
+        tableArrayList.add(new Table(34, "Trống", 0, null));
+        tableArrayList.add(new Table(35, "Trống", 0, null));
+        tableArrayList.add(new Table(36, "Trống", 0, null));
+        tableArrayList.add(new Table(37, "Đã đặt", 3, null));
+        tableArrayList.add(new Table(38, "Trống", 0, null));
+        tableArrayList.add(new Table(39, "Trống", 0, null));
+        tableArrayList.add(new Table(40, "Trống", 0, null));
+        tableArrayList.add(new Table(41, "Trống", 0, null));
+        tableArrayList.add(new Table(42, "Trống", 0, null));
+        tableArrayList.add(new Table(43, "Trống", 0, null));
+        tableArrayList.add(new Table(44, "Trống", 0, null));
+        tableArrayList.add(new Table(45, "Trống", 0, null));
+        tableArrayList.add(new Table(46, "Trống", 0, null));
+        tableArrayList.add(new Table(47, "Đã đặt", 2, null));
+        tableArrayList.add(new Table(48, "Trống", 0, null));
+        tableArrayList.add(new Table(49, "Trống", 0, null));
+        tableArrayList.add(new Table(50, "Trống", 0, null));
+        tableArrayList.add(new Table(51, "Trống", 0, null));
+        tableArrayList.add(new Table(52, "Đã đặt", 1, null));
+        tableArrayList.add(new Table(53, "Trống", 0, null));
+        tableArrayList.add(new Table(54, "Trống", 0, null));
+        tableArrayList.add(new Table(55, "Trống", 0, null));
+        tableArrayList.add(new Table(56, "Trống", 0, null));
+        tableArrayList.add(new Table(57, "Đã đặt", 4, null));
+        tableArrayList.add(new Table(58, "Trống", 0, null));
+        tableArrayList.add(new Table(59, "Trống", 0, null));
+        tableArrayList.add(new Table(60, "Trống", 0, null));
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    private void loadTablesFromDatabase() {
+        tableArrayList.clear();
 
-        if (requestCode == REQUEST_CODE_CART && resultCode == RESULT_OK && data != null) {
-            // Nhận thông tin bàn đã cập nhật
-            int tablePosition = data.getIntExtra("tablePosition", -1);
-            int numGuests = data.getIntExtra("numGuests", 0);
-            String status = data.getStringExtra("status");
-            ArrayList<Food> selectedFoods = (ArrayList<Food>) data.getSerializableExtra("selectedFoods");
+        for (int i = 1; i <= 30; i++) {
+            Table table = new Table(i, "Trống", 0, null);
 
-            // Cập nhật bàn trong TableAdapter
-            if (tablePosition != -1) {
-                Table updatedTable = tableArrayList.get(tablePosition); // Dùng tablePosition để lấy bàn đã cập nhật
-                updatedTable.setNumberOfGuests(numGuests);
-                updatedTable.setStatus(status);
+            ArrayList<Cart> orders = databaseHandler.getOrdersByTableId(i);
 
-                if (selectedFoods != null) {
-                    updatedTable.setOrderedFoods(selectedFoods);
-                }
+            if (!orders.isEmpty()) {
+                table.setStatus("Đang phục vụ");
+                table.setNumberOfGuests(orders.get(0).getNumGuests());
+            } else {
+                table.setStatus("Trống");
+                table.setNumberOfGuests(0);
+            }
+            tableArrayList.add(table);
+        }
+        tableAdapter.notifyDataSetChanged();
+    }
 
-                tableAdapter.notifyDataSetChanged(); // Cập nhật giao diện
+    public void updateTableStatus(int tableId, int numGuests, String status) {
+        for (Table table : tableArrayList) {
+            if (table.getTableId() == tableId) {
+                table.setNumberOfGuests(numGuests);
+                table.setStatus(status);
+                break;
             }
         }
+        tableAdapter.notifyDataSetChanged();
     }
 
     private void showAddNumberDialog(Table selectedTable) {
@@ -152,10 +166,10 @@ public class TableActivity extends AppCompatActivity {
                 selectedTable.setNumberOfGuests(numGuests);
 
                 selectedTable.setStatus("Đang phục vụ");
-                tableAdapter.notifyDataSetChanged(); // Cập nhật giao diện
+                tableAdapter.notifyDataSetChanged();
 
                 Intent intent = new Intent(TableActivity.this, MenuActivity.class);
-                intent.putExtra("table_id", selectedTable.getTableId());
+                intent.putExtra("tableId", selectedTable.getTableId());
                 intent.putExtra("currentTable", selectedTable);
                 intent.putExtra("numGuests", numGuests);
                 startActivityForResult(intent, REQUEST_CODE_CART);
