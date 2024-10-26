@@ -38,12 +38,13 @@
         android:layout_alignParentEnd="true"
         android:layout_margin="8dp"
         android:padding="8dp"
-        android:background="@drawable/spinner_background"
+        android:background="@drawable/spinner_dropdown_background"
         android:spinnerMode="dropdown"
         android:textColor="@color/black"
         android:textSize="12sp"
         android:paddingStart="10dp"
-        android:paddingEnd="10dp" />
+        android:paddingEnd="10dp"
+        style="@style/CustomSpinnerStyle"/>
 
     <ListView
         android:id="@+id/listview_category"

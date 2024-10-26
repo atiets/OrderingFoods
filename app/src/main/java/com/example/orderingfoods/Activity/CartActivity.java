@@ -52,6 +52,7 @@ public class CartActivity extends AppCompatActivity {
 
         int numGuests = getIntent().getIntExtra("numGuests", 0);
         int tableId = getIntent().getIntExtra("tableId", -1);
+        String arrivalTime = getIntent().getStringExtra("arrivalTime"); // Correct method to retrieve arrivalTime
 
         DatabaseHandler databaseHandler = new DatabaseHandler(this);
         textQty = findViewById(R.id.text_qty);
@@ -105,7 +106,7 @@ public class CartActivity extends AppCompatActivity {
         });
 
         btnSave.setOnClickListener(v -> {
-            databaseHandler.addOrder(selectedFoods, numGuests, tableId, "Đang phục vụ");
+            databaseHandler.addOrder(selectedFoods, numGuests, tableId, "Đang phục vụ", arrivalTime);
             Intent intent = new Intent(CartActivity.this, TableActivity.class);
             startActivity(intent);
             finish();

@@ -9,14 +9,16 @@ public class Cart implements Serializable {
     private int numGuests;
     private int tableId;
     private String status;
+    private String arrivalTime;
 
-    public Cart(String name, double price, int quantity, int numGuests, int tableId, String status) {
+    public Cart(String name, double price, int quantity, int numGuests, int tableId, String status, String arrivalTime) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
         this.numGuests = numGuests;
         this.tableId = tableId;
         this.status = status;
+        this.arrivalTime = arrivalTime;
     }
 
     public String getName() {
@@ -65,5 +67,13 @@ public class Cart implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public void setArrivalTime(String arrivalTime) {
+        this.arrivalTime = arrivalTime;
     }
 }
