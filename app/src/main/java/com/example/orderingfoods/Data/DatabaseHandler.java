@@ -26,6 +26,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String COLUMN_TABLE_ID = "tableId";
     private static final String COLUMN_STATUS = "status";
     private static final String COLUMN_TOTAL_PRICE = "totalPrice";
+    private static final String COLUMN_ARRIVAL_TIME = "arrivalTime"; // Thêm cột arrivalTime
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -41,7 +42,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 COLUMN_NUM_GUESTS + " INTEGER, " +
                 COLUMN_TABLE_ID + " INTEGER, " +
                 COLUMN_STATUS + " TEXT, " +
-                COLUMN_TOTAL_PRICE + " REAL" +
+                COLUMN_TOTAL_PRICE + " REAL, " + // Thêm cột arrivalTime
+                COLUMN_ARRIVAL_TIME + " TEXT" + // Thêm cột arrivalTime
                 ")";
         db.execSQL(createTable);
     }
@@ -52,23 +54,36 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addOrder(ArrayList<Food> selectedFoods, int numGuests, int tableId, String status) {
+    public void addOrder(ArrayList<Food> selectedFoods, int numGuests, int tableId, String status, String arrivalTime) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
 
         try {
-            for (Food food : selectedFoods) {
+            if (selectedFoods.isEmpty()) {
                 ContentValues values = new ContentValues();
-                values.put(COLUMN_FOOD_NAME, food.getName());
-                values.put(COLUMN_QUANTITY, food.getQuantity());
+                values.put(COLUMN_FOOD_NAME, "");
+                values.put(COLUMN_QUANTITY, 0);
                 values.put(COLUMN_NUM_GUESTS, numGuests);
                 values.put(COLUMN_TABLE_ID, tableId);
                 values.put(COLUMN_STATUS, status);
-
-                double totalPrice = food.getPrice() * food.getQuantity();
-                values.put(COLUMN_TOTAL_PRICE, totalPrice);
+                values.put(COLUMN_ARRIVAL_TIME, arrivalTime);
 
                 db.insert(TABLE_ORDERS, null, values);
+            } else {
+                for (Food food : selectedFoods) {
+                    ContentValues values = new ContentValues();
+                    values.put(COLUMN_FOOD_NAME, food.getName());
+                    values.put(COLUMN_QUANTITY, food.getQuantity());
+                    values.put(COLUMN_NUM_GUESTS, numGuests);
+                    values.put(COLUMN_TABLE_ID, tableId);
+                    values.put(COLUMN_STATUS, status);
+                    values.put(COLUMN_ARRIVAL_TIME, arrivalTime);
+
+                    double totalPrice = food.getPrice() * food.getQuantity();
+                    values.put(COLUMN_TOTAL_PRICE, totalPrice);
+
+                    db.insert(TABLE_ORDERS, null, values);
+                }
             }
             db.setTransactionSuccessful();
         } finally {
@@ -80,9 +95,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public ArrayList<Cart> getOrdersByTableId(int tableId) {
         ArrayList<Cart> orders = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-//        Cursor cursor = db.rawQuery("SELECT * FROM orders WHERE tableId = ? AND status = ?",
-//                new String[]{String.valueOf(tableId), "Đang phục vụ"});
-        Cursor cursor = db.rawQuery("SELECT * FROM orders WHERE tableId = ?", new String[]{String.valueOf(tableId)});
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_ORDERS + " WHERE tableId = ?", new String[]{String.valueOf(tableId)});
 
         if (cursor != null) {
             while (cursor.moveToNext()) {
@@ -93,17 +106,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 int numGuestsIndex = cursor.getColumnIndex(COLUMN_NUM_GUESTS);
                 int tableIdIndex = cursor.getColumnIndex(COLUMN_TABLE_ID);
                 int statusIndex = cursor.getColumnIndex(COLUMN_STATUS);
+                int arrivalTimeIndex = cursor.getColumnIndex(COLUMN_ARRIVAL_TIME); // Lấy chỉ số cột arrivalTime
 
                 // Chỉ lấy dữ liệu nếu chỉ số cột hợp lệ
-                if (foodNameIndex != -1 && totalPriceIndex != -1 && quantityIndex != -1 && numGuestsIndex != -1 && tableIdIndex != -1 && statusIndex != -1) {
+                if (foodNameIndex != -1 && totalPriceIndex != -1 && quantityIndex != -1 && numGuestsIndex != -1 && tableIdIndex != -1 && statusIndex != -1 && arrivalTimeIndex != -1) {
                     String foodName = cursor.getString(foodNameIndex);
                     double totalPrice = cursor.getDouble(totalPriceIndex);
                     int quantity = cursor.getInt(quantityIndex);
                     int numGuests = cursor.getInt(numGuestsIndex);
                     int tableIdValue = cursor.getInt(tableIdIndex);
                     String status = cursor.getString(statusIndex);
+                    String arrivalTime = cursor.getString(arrivalTimeIndex); // Lấy arrivalTime
 
-                    Cart order = new Cart(foodName, totalPrice, quantity, numGuests, tableIdValue, status);
+                    Cart order = new Cart(foodName, totalPrice, quantity, numGuests, tableIdValue, status, arrivalTime); // Cập nhật đối tượng Cart để bao gồm arrivalTime
                     orders.add(order);
                 }
             }
@@ -115,7 +130,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public void clearOrdersByTableId(int tableId) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete("Orders", "tableId = ?", new String[]{String.valueOf(tableId)});
+        db.delete(TABLE_ORDERS, COLUMN_TABLE_ID + " = ?", new String[]{String.valueOf(tableId)});
         db.close();
     }
 }
